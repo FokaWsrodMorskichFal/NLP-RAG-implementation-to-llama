@@ -2,3 +2,4 @@
 databases/
 __pycache__/
 *.env
+report/
