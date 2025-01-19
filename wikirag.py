@@ -8,6 +8,7 @@ from langchain.chains import TransformChain
 import vector_database
 import embedding
 import wiki
+import time
 
 
 class WikiRAG:
@@ -25,7 +26,11 @@ class WikiRAG:
         return search_results, likeness
 
     def wikipedia_retriever(self, input_: str) -> str:
+            start_time = time.time()
             search_results, _ = self.db_search(input_)
+            print("Time taken for database search: ", time.time()-start_time)
+
+            start_time = time.time()
             documents = []
             for result in search_results:
                 section_text = wiki.get_section_text(result['page_title'], 
@@ -34,20 +39,34 @@ class WikiRAG:
                                                     result['subsubsection_title'],
                                                     result['part'])
                 documents.append(section_text)
-            retrievals = "\n".join(documents)
-            return retrievals
-    
+            print("Time taken for retrieval: ", time.time()-start_time)
+            return documents
+
     def query(self, question):
     # Template for the prompt
+
         template_RAG = "Your training data is up to march 2023. You are given a context describing events in 2023 and 2024. Answer the question based on the context. If the context doesn't involve reliable information say so. Context: {context} \n Question: {question}"
         
         # Preparing the prompt using the template
-        prompt = template_RAG.format(context=self.wikipedia_retriever(question), question=question)
+        retrivals = self.wikipedia_retriever(question)
+
+
+        context = "\n".join(retrivals)
+        prompt = template_RAG.format(context = context, question=question)
         
         # Initialize the model (ChatOllama) with the model name
         model = ChatOllama(model=self.model_name)
         
         # Run the model with the generated prompt
-        response = model.invoke(prompt)
+        start_time = time.time()
+        response = model.invoke(prompt).content
+        print("Time taken for model: ", time.time()-start_time)
+
+        output = {
+            "question": question,
+            "answer": response,
+            "retrivals": retrivals
+        }
         
-        return response
+        return output
+
