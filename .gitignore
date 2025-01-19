@@ -1,0 +1,6 @@
+.venv/
+*.txt
+*.index
+*.json
+*.csv
+__pycache__/
