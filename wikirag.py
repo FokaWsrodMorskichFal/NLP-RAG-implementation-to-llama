@@ -24,7 +24,7 @@ class WikiRAG:
         search_results, likeness = self.db.search(emb, self.documents_retrieved)
         return search_results, likeness
 
-    def wikipedia_retriever(self, input_: dict) -> str:
+    def wikipedia_retriever(self, input_: str) -> str:
             search_results, _ = self.db_search(input_)
             documents = []
             for result in search_results:
