@@ -26,9 +26,9 @@ class VectorDatabaseWraper:
 
     def search(self, query_vector, k):
         distances, indices = self.index.search(query_vector.reshape(1, -1), k)
-        print(indices[0])
-        print(distances)
-        print([self.metadata[i] for i in indices[0]])
+        #print(indices[0])
+        #print(distances)
+        #print([self.metadata[i] for i in indices[0]])
         return [self.metadata[i] for i in indices[0]], distances[0]
     
     def has_record(self, metadata):

@@ -1,6 +1,4 @@
 .venv/
-*.txt
-*.index
-*.json
-*.csv
+databases/
 __pycache__/
+*.env

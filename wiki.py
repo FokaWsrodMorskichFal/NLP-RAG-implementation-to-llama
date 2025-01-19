@@ -12,16 +12,16 @@ def get_section_text(page_title: str, section_title: str, subsection_title: str,
     part_of_text = part
     wiki_wiki = wikipediaapi.Wikipedia(language='en', user_agent="NLP WUT 2024")
     page = wiki_wiki.page(page_title)
-    print("##### PAGE #####")
-    print(page)
+    #print("##### PAGE #####")
+    #print(page)
     section = page.section_by_title(section_title)
     if subsection_title != '':
         section = section.section_by_title(subsection_title)
         if subsubsection_title != '':
             section = section.section_by_title(subsubsection_title)
     
-    print("##### SECTION #####")
-    print(section)
+    #print("##### SECTION #####")
+    #print(section)
 
     ############################
     merged_title = " ".join([page_title, section_title, subsection_title, subsubsection_title])
@@ -54,9 +54,11 @@ def get_section_text(page_title: str, section_title: str, subsection_title: str,
             section_text[k] = " ".join([merged_title, section_text[k]])
 
     section = section_text + table_chunks
+    """
     print(section)
     print(len(section))
     print(part_of_text[0])
+    """
     tmp = section[part_of_text[0]]
     ############################
 

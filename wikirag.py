@@ -2,10 +2,9 @@ import os
 import ollama
 from langchain.prompts import ChatPromptTemplate
 from langchain.prompts import PromptTemplate
-from langchain_community.chat_models import ChatOllama
+from langchain_ollama import ChatOllama
 from langchain_core.runnables import RunnablePassthrough
 from langchain.chains import TransformChain
-
 import vector_database
 import embedding
 import wiki
@@ -27,8 +26,6 @@ class WikiRAG:
 
     def wikipedia_retriever(self, input_: dict) -> str:
             search_results, _ = self.db_search(input_)
-            print("##### DICTIONARY #####")
-            print(search_results)
             documents = []
             for result in search_results:
                 section_text = wiki.get_section_text(result['page_title'], 
@@ -37,10 +34,7 @@ class WikiRAG:
                                                     result['subsubsection_title'],
                                                     result['part'])
                 documents.append(section_text)
-
-            print("##### Retrievals #####")
             retrievals = "\n".join(documents)
-            print(retrievals)
             return retrievals
     
     def query(self, question):
@@ -52,5 +46,4 @@ class WikiRAG:
             | prompt
             | model
         )
-        print("##### ANSWER #####")
         return chain_wiki.invoke(question)

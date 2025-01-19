@@ -141,9 +141,6 @@ def remove_unrelevant_sections(metadata):
         i += 1
 
     metadata2 = list(compress(metadata, mask))
-    for dic in metadata2:
-        print(dic)
-    print(len(metadata2))
     return metadata2
 
 def section_contains_table(article_title, section_title, subsection_title='', subsubsection_title=''):
