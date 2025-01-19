@@ -28,7 +28,7 @@ class WikiRAG:
     def wikipedia_retriever(self, input_: str) -> str:
             start_time = time.time()
             search_results, _ = self.db_search(input_)
-            print("Time taken for database search: ", time.time()-start_time)
+            self.database_search_time = time.time()-start_time
 
             start_time = time.time()
             documents = []
@@ -39,7 +39,7 @@ class WikiRAG:
                                                     result['subsubsection_title'],
                                                     result['part'])
                 documents.append(section_text)
-            print("Time taken for retrieval: ", time.time()-start_time)
+            self.retrival_time = time.time()-start_time
             return documents
 
     def query(self, question):
@@ -60,7 +60,7 @@ class WikiRAG:
         # Run the model with the generated prompt
         start_time = time.time()
         response = model.invoke(prompt).content
-        print("Time taken for model: ", time.time()-start_time)
+        self.model_response_time =  time.time()-start_time
 
         output = {
             "question": question,
@@ -69,4 +69,11 @@ class WikiRAG:
         }
         
         return output
+    
+    def get_time(self):
+        return {
+            "database search time": self.database_search_time,
+            "retrival time": self.retrival_time,
+            "model response time": self.model_response_time
+        }
 
