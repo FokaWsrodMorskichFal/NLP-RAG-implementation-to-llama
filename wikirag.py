@@ -38,12 +38,16 @@ class WikiRAG:
             return retrievals
     
     def query(self, question):
-        template_RAG = "Your training data is up to march 2023. You are given a context describing events in 2023 and 2024. Answer the question based on the context. If the context doesn't invlove reliable information say so. Context: {context} \n Question: {question}"
-        prompt = ChatPromptTemplate.from_template(template_RAG)
-        model = ChatOllama(model = self.model_name)
-        chain_wiki = (
-            {"context": self.wikipedia_retriever, "question": RunnablePassthrough()}
-            | prompt
-            | model
-        )
-        return chain_wiki.invoke(question)
+    # Template for the prompt
+        template_RAG = "Your training data is up to march 2023. You are given a context describing events in 2023 and 2024. Answer the question based on the context. If the context doesn't involve reliable information say so. Context: {context} \n Question: {question}"
+        
+        # Preparing the prompt using the template
+        prompt = template_RAG.format(context=self.wikipedia_retriever(question), question=question)
+        
+        # Initialize the model (ChatOllama) with the model name
+        model = ChatOllama(model=self.model_name)
+        
+        # Run the model with the generated prompt
+        response = model.invoke(prompt)
+        
+        return response

@@ -12,6 +12,7 @@ CONST_CHUNK_SIZE = 60
 CONST_CHUNK_OVERLAP = 10
 CONST_ROWS_IN_CHUNKS = 4
 
+
 def get_articles_by_categories(included_categories, 
                                wiki, 
                                topic_keywords, 
